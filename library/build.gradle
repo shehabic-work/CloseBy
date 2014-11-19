@@ -1,0 +1,81 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "21.1.1"
+
+    defaultConfig {
+        applicationId "com.shehabic.closeby"
+        minSdkVersion 13
+        targetSdkVersion 21
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+ext {
+    PUBLISH_GROUP_ID = 'com.shehabic.closeby'
+    PUBLISH_ARTIFACT_ID = 'Close-By'
+    PUBLISH_VERSION = '1.0.0'
+}
+
+
+// ./gradlew clean build generateRelease
+apply plugin: 'maven'
+
+def groupId = project.PUBLISH_GROUP_ID
+def artifactId = project.PUBLISH_ARTIFACT_ID
+def version = project.PUBLISH_VERSION
+
+def localReleaseDest = "file:///Users/shehabic/android/maven"
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+uploadArchives {
+    repositories.mavenDeployer {
+        pom.groupId = groupId
+        pom.artifactId = artifactId
+        pom.version = version
+        // Add other pom properties here if you want (developer details / licenses)
+        repository(url: "file://${localReleaseDest}")
+    }
+}
+
+task zipRelease(type: Zip) {
+    from localReleaseDest
+    destinationDir buildDir
+    archiveName "release-${version}.zip"
+}
+
+task generateReleases << {
+    println "Release ${version} can be found at ${localReleaseDest}/"
+    println "Release ${version} zipped can be found ${buildDir}/release-${version}.zip"
+}
+
+generateReleases.dependsOn(uploadArchives)
+generateReleases.dependsOn(zipRelease)
+
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
