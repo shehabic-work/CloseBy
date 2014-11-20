@@ -6,6 +6,7 @@ Place any element in android beside/above/below existing element with a lot of c
 
 How to use it
 =======
+        in an Activity context do the following
 
         CloseBy.Builder builder = new CloseBy.Builder(this)
                 .setPosition(CloseBy.POSITION_TOP_RIGHT)
