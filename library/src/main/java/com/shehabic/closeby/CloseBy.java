@@ -495,8 +495,17 @@ public class CloseBy {
         }
 
         public CloseBy build() {
-            this.clsBy.sourceView = this.srcView;            CloseBy closeBy = new CloseBy(this.activity, this.srcView, this.clsBy, this.position, this.horizontalAlignment,
-                    this.verticalAlignment);
+            this.clsBy.sourceView = this.srcView;
+
+            CloseBy closeBy = new CloseBy(
+                this.activity,
+                this.srcView,
+                this.clsBy,
+                this.position,
+                this.horizontalAlignment,
+                this.verticalAlignment
+            );
+
             if (this.onclick != null) {
                 closeBy.setOnClick(this.onclick);
             }
