@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class CloseBy {
@@ -53,6 +55,8 @@ public class CloseBy {
     protected int horizontalAlignment = ALIGN_HORIZONTAL_CENTER;
 
     protected boolean added = false;
+
+    protected static int statusBarHeight = -1;
 
     public static class Item {
         public int x;
@@ -172,11 +176,41 @@ public class CloseBy {
         return size;
     }
 
+
+    protected boolean isTranslucentStatusBar()
+    {
+        Window w = ((Activity) sourceView.getContext()).getWindow();
+        WindowManager.LayoutParams lp = w.getAttributes();
+        int flags = lp.flags;
+
+        if ((flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) == WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public int getStatusBarHeight() {
+        if (statusBarHeight == -1 && isTranslucentStatusBar()) {
+            statusBarHeight = 0;
+        } else if (statusBarHeight == -1) {
+            int result = 0;
+            int resourceId = sourceView.getContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                result = sourceView.getContext().getResources().getDimensionPixelSize(resourceId);
+            }
+            statusBarHeight = result;
+        }
+
+        return statusBarHeight;
+    }
+
+
     protected Point getActionViewCoordinates() {
         int[] coords = new int[2];
         sourceView.getLocationOnScreen(coords);
 
-        return new Point(coords[0], coords[1]);
+        return new Point(coords[0], coords[1] - getStatusBarHeight());
     }
 
     public Point getActionViewCenter() {
