@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,8 +176,7 @@ public class CloseBy {
     }
 
 
-    protected boolean isTranslucentStatusBar()
-    {
+    protected boolean isTranslucentStatusBar() {
         Window w = ((Activity) sourceView.getContext()).getWindow();
         WindowManager.LayoutParams lp = w.getAttributes();
         int flags = lp.flags;
@@ -303,7 +301,6 @@ public class CloseBy {
         if (added) {
             return;
         }
-        Log.d("Adding", "Yes");
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(closeBy.width, closeBy.height, Gravity.TOP
                 | Gravity.LEFT);
         params.setMargins(closeBy.x, closeBy.y, 0, 0);
@@ -322,7 +319,8 @@ public class CloseBy {
         if (animated && animationHandler != null) {
             animationHandler.hide(closeBy.view, this);
         } else {
-            detach();            isAnimating = false;
+            detach();
+            isAnimating = false;
         }
     }
 
@@ -424,7 +422,7 @@ public class CloseBy {
             view.setLayoutParams(new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
             view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            // Log.d("Measured W/H", view.getMeasuredWidth() + "," + view.getMeasuredHeight());
+
             this.clsBy = new Item(view, this.srcView, view.getMeasuredWidth(), view.getMeasuredHeight());
 
             return this;
@@ -532,12 +530,12 @@ public class CloseBy {
             this.clsBy.sourceView = this.srcView;
 
             CloseBy closeBy = new CloseBy(
-                this.activity,
-                this.srcView,
-                this.clsBy,
-                this.position,
-                this.horizontalAlignment,
-                this.verticalAlignment
+                    this.activity,
+                    this.srcView,
+                    this.clsBy,
+                    this.position,
+                    this.horizontalAlignment,
+                    this.verticalAlignment
             );
 
             if (this.onclick != null) {
