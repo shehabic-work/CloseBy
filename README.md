@@ -6,18 +6,20 @@ Version
 =======
 v.1.0.0
 
-Usage (Gradle)
-==============
-```
-repositories {
-    maven { url 'http://maven.shehabic.com' }
-}
+Usage (Maven)
+=============
+```XML
+<dependency>
+  <groupId>com.shehabic</groupId>
+  <artifactId>closeby</artifactId>
+  <version>1.0.0</version>
+</dependency>
 ```
 
-```
-dependencies {
-    compile 'com.shehabic.closeby:Close-By:1.0.0@aar'
-}
+Usage (Gradle)
+==============
+```groovy
+compile 'com.shehabic:closeby:1.0.0@aar'
 ```
 
 How to use it
